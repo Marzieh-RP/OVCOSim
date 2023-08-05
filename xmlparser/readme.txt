@@ -11,19 +11,6 @@ tree queries. Full Unicode support is also available, with Unicode interface
 variants and conversions between different Unicode encodings (which happen
 automatically during parsing/saving).
 
-The distribution contains the following folders:
-
-	docs/ - documentation
-		docs/samples - pugixml usage examples
-		docs/quickstart.html - quick start guide
-		docs/manual.html - complete manual
-
-	scripts/ - project files for IDE/build systems
-
-	src/ - header and source files
-
-	readme.txt - this file.
-
 This library is distributed under the MIT License:
 
 Copyright (c) 2006-2022 Arseny Kapoulkine
