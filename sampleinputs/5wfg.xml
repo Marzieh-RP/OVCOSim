@@ -1,0 +1,297 @@
+<?xml version="1.0"?>
+<config>
+  <settings algorithm="rl_pb" iterations="100000" usegnuplot="on" usegraphviz="on" speed_weight = "0.4" energy_weight = "0.2" cost_weight = "0.4"/>
+  <resources>
+    <!--the first resource must be the local device-->
+    <resource name="Mobile" idlepowerratio="0.1" speed="1" cost="0" devtype="mobile">
+      <!--speed is relative to the mobile device-->
+      <connection to="Cloud1" speed="50" latency="100"/>
+      <!--speed is in MBps and latency is in ms-->
+      <connection to="Cloud2" speed="50" latency="100"/>
+      <connection to="Fog1" speed="50" latency="20"/>
+      <connection to="Fog2" speed="50" latency="20"/>
+    </resource>
+    <resource name="Cloud1" speed="3" cost = "1.51">
+      <connection to="Mobile" speed="150" latency="100"/>
+      <connection to="Cloud2" speed="1000" latency="100"/>
+      <connection to="Fog1" speed="1000" latency="100"/>
+      <connection to="Fog2" speed="1000" latency="100"/>
+    </resource>
+    <resource name="Cloud2" speed="3" cost = "1.51">
+      <connection to="Mobile" speed="150" latency="100"/>
+      <connection to="Cloud1" speed="1000" latency="100"/>
+      <connection to="Fog1" speed="1000" latency="100"/>
+      <connection to="Fog2" speed="1000" latency="100"/>
+    </resource>
+    <resource name="Fog1" speed="2" cost = "1">
+      <connection to="Mobile" speed="150" latency="20"/>
+      <connection to="Cloud1" speed="1000" latency="100"/>
+      <connection to="Cloud2" speed="1000" latency="100"/>
+      <connection to="Fog2" speed="1000" latency="20"/>
+    </resource>
+    <resource name="Fog2" speed="2" cost = "1">
+      <connection to="Mobile" speed="150" latency="20"/>
+      <connection to="Cloud1" speed="1000" latency="100"/>
+      <connection to="Cloud2" speed="1000" latency="100"/>
+      <connection to="Fog1" speed="1000" latency="20"/>
+    </resource>
+  </resources>
+  <wfgs>
+    <!--start of workflow graphs-->
+    <wfg name="WFG1" color="FF0000" type="userdefined" device="Mobile">
+      <!--first workflow graph-->
+        <!--nodes of WFG-->
+        <node name="T0" color="FF0000" compute="68.6">
+          <!--compute time is in ms, as measured on the mobile device-->
+          <!--the node transmits tasks to which other node(s)-->
+          <to name="T3" data="12.003"/>
+          <!--data is in KB-->
+        </node>
+        <node name="T1" color="F50000" compute="33">
+          <to name="T3" data="12"/>
+        </node>
+        <node name="T2" color="EB0000" compute="2.2">
+          <to name="T3" data="0.03"/>
+        </node>
+        <node name="T3" color="E10000" compute="516.6">
+          <to name="T6" data="19.806"/>
+        </node>
+        <node name="T4" color="D70000" compute="77.7">
+          <to name="T7" data="0"/>
+        </node>
+        <node name="T5" color="CD0000" compute="192">
+          <to name="T9" data="10.206"/>
+        </node>
+        <node name="T6" color="C30000" compute="516.5">
+          <to name="T9" data="10.204"/>
+        </node>
+        <node name="T7" color="B90000" compute="75.2">
+          <to name="T10" data="0.6752"/>
+        </node>
+        <node name="T8" color="AF0000" compute="2.2">
+          <to name="T11" data="0"/>
+        </node>
+        <node name="T9" color="A50000" compute="722.2">
+          <to name="T12" data="10.206"/>
+        </node>
+        <node name="T10" color="9B0000" compute="80.7">
+          <to name="T13" data="1.0242"/>
+        </node>
+        <node name="T11" color="910000" compute="35.9">
+          <to name="T13" data="0.6"/>
+        </node>
+        <node name="T12" color="870000" compute="1464">
+          <to name="T14" data="0.0002"/>
+        </node>
+        <node name="T13" color="7D0000" compute="137.8" >
+          <to name="T14" data="0.00029"/>
+        </node>
+        <node name="T14" color="730000" compute="1553.3" />
+        <!-- example node without outgoing edge-->
+    </wfg>
+    <wfg name="WFG2" color="00FF00" type="userdefined" device="Mobile">
+      <!--first workflow graph-->
+        <!--nodes of WFG-->
+        <node name="T0" color="00FF00" compute="68.6">
+          <!--compute time is in ms, as measured on the mobile device-->
+          <!--the node transmits tasks to which other node(s)-->
+          <to name="T3" data="12.003"/>
+          <!--data is in KB-->
+        </node>
+        <node name="T1" color="00F500" compute="33">
+          <to name="T3" data="12"/>
+        </node>
+        <node name="T2" color="00EB00" compute="2.2">
+          <to name="T3" data="0.03"/>
+        </node>
+        <node name="T3" color="00E100" compute="516.6">
+          <to name="T6" data="19.806"/>
+        </node>
+        <node name="T4" color="00D700" compute="77.7">
+          <to name="T7" data="0"/>
+        </node>
+        <node name="T5" color="00CD00" compute="192">
+          <to name="T9" data="10.206"/>
+        </node>
+        <node name="T6" color="00C300" compute="516.5">
+          <to name="T9" data="10.204"/>
+        </node>
+        <node name="T7" color="00B900" compute="75.2">
+          <to name="T10" data="0.6752"/>
+        </node>
+        <node name="T8" color="00AF00" compute="2.2">
+          <to name="T11" data="0"/>
+        </node>
+        <node name="T9" color="00A5000" compute="722.2">
+          <to name="T12" data="10.206"/>
+        </node>
+        <node name="T10" color="009B00" compute="80.7">
+          <to name="T13" data="1.0242"/>
+        </node>
+        <node name="T11" color="009100" compute="35.9">
+          <to name="T13" data="0.6"/>
+        </node>
+        <node name="T12" color="008700" compute="1464">
+          <to name="T14" data="0.0002"/>
+        </node>
+        <node name="T13" color="007D00" compute="137.8" >
+          <to name="T14" data="0.00029"/>
+        </node>
+        <node name="T14" color="007300" compute="1553.3"/>
+        <!-- example node without outgoing edge-->
+    </wfg>
+    <wfg name="WFG3" color="0000FF" type="userdefined" device = "Mobile">
+      <!--first workflow graph-->
+        <!--nodes of WFG-->
+        <node name="T0" color="0000FF" compute="68.6">
+          <!--compute time is in ms, as measured on the mobile device-->
+          <!--the node transmits tasks to which other node(s)-->
+          <to name="T3" data="12.003"/>
+          <!--data is in KB-->
+        </node>
+        <node name="T1" color="0000F5" compute="33">
+          <to name="T3" data="12"/>
+        </node>
+        <node name="T2" color="0000EB" compute="2.2">
+          <to name="T3" data="0.03"/>
+        </node>
+        <node name="T3" color="0000E1" compute="516.6">
+          <to name="T6" data="19.806"/>
+        </node>
+        <node name="T4" color="0000D7" compute="77.7">
+          <to name="T7" data="0"/>
+        </node>
+        <node name="T5" color="0000CD" compute="192">
+          <to name="T9" data="10.206"/>
+        </node>
+        <node name="T6" color="0000C3" compute="516.5">
+          <to name="T9" data="10.204"/>
+        </node>
+        <node name="T7" color="0000B9" compute="75.2">
+          <to name="T10" data="0.6752"/>
+        </node>
+        <node name="T8" color="0000AF" compute="2.2">
+          <to name="T11" data="0"/>
+        </node>
+        <node name="T9" color="0000A5" compute="722.2">
+          <to name="T12" data="10.206"/>
+        </node>
+        <node name="T10" color="00009B" compute="80.7">
+          <to name="T13" data="1.0242"/>
+        </node>
+        <node name="T11" color="000091" compute="35.9">
+          <to name="T13" data="0.6"/>
+        </node>
+        <node name="T12" color="000087" compute="1464">
+          <to name="T14" data="0.0002"/>
+        </node>
+        <node name="T13" color="00007D" compute="137.8" >
+          <to name="T14" data="0.00029"/>
+        </node>
+        <node name="T14" color="000073" compute="1553.3"/>
+        <!-- example node without outgoing edge-->
+    </wfg>
+    <wfg name="WFG4" color="FF00FF" type="userdefined" device="Mobile">
+      <!--first workflow graph-->
+        <!--nodes of WFG-->
+        <node name="T0" color="FF00FF" compute="68.6">
+          <!--compute time is in ms, as measured on the mobile device-->
+          <!--the node transmits tasks to which other node(s)-->
+          <to name="T3" data="12.003"/>
+          <!--data is in KB-->
+        </node>
+        <node name="T1" color="F500F5" compute="33">
+          <to name="T3" data="12"/>
+        </node>
+        <node name="T2" color="EB00EB" compute="2.2">
+          <to name="T3" data="0.03"/>
+        </node>
+        <node name="T3" color="E100E1" compute="516.6">
+          <to name="T6" data="19.806"/>
+        </node>
+        <node name="T4" color="D700D7" compute="77.7">
+          <to name="T7" data="0"/>
+        </node>
+        <node name="T5" color="CD00CD" compute="192">
+          <to name="T9" data="10.206"/>
+        </node>
+        <node name="T6" color="C300C3" compute="516.5">
+          <to name="T9" data="10.204"/>
+        </node>
+        <node name="T7" color="B900B9" compute="75.2">
+          <to name="T10" data="0.6752"/>
+        </node>
+        <node name="T8" color="AF00AF" compute="2.2">
+          <to name="T11" data="0"/>
+        </node>
+        <node name="T9" color="A500A5" compute="722.2">
+          <to name="T12" data="10.206"/>
+        </node>
+        <node name="T10" color="9B009B" compute="80.7">
+          <to name="T13" data="1.0242"/>
+        </node>
+        <node name="T11" color="910091" compute="35.9">
+          <to name="T13" data="0.6"/>
+        </node>
+        <node name="T12" color="870087" compute="1464">
+          <to name="T14" data="0.0002"/>
+        </node>
+        <node name="T13" color="7D007D" compute="137.8" >
+          <to name="T14" data="0.00029"/>
+        </node>
+        <node name="T14" color="730073" compute="1553.3"/>
+        <!-- example node without outgoing edge-->
+    </wfg>
+    <wfg name="WFG5" color="00FFFF" type="userdefined" device="Mobile">
+      <!--first workflow graph-->
+        <!--nodes of WFG-->
+        <node name="T0" color="00FFFF" compute="68.6">
+          <!--compute time is in ms, as measured on the mobile device-->
+          <!--the node transmits tasks to which other node(s)-->
+          <to name="T3" data="12.003"/>
+          <!--data is in KB-->
+        </node>
+        <node name="T1" color="00F5F5" compute="33">
+          <to name="T3" data="12"/>
+        </node>
+        <node name="T2" color="00EBEB" compute="2.2">
+          <to name="T3" data="0.03"/>
+        </node>
+        <node name="T3" color="00E1E1" compute="516.6">
+          <to name="T6" data="19.806"/>
+        </node>
+        <node name="T4" color="00D7D7" compute="77.7">
+          <to name="T7" data="0"/>
+        </node>
+        <node name="T5" color="00CDCD" compute="192">
+          <to name="T9" data="10.206"/>
+        </node>
+        <node name="T6" color="00C3C3" compute="516.5">
+          <to name="T9" data="10.204"/>
+        </node>
+        <node name="T7" color="00B9B9" compute="75.2">
+          <to name="T10" data="0.6752"/>
+        </node>
+        <node name="T8" color="00AFAF" compute="2.2">
+          <to name="T11" data="0"/>
+        </node>
+        <node name="T9" color="009BA5" compute="722.2">
+          <to name="T12" data="10.206"/>
+        </node>
+        <node name="T10" color="009B9B" compute="80.7">
+          <to name="T13" data="1.0242"/>
+        </node>
+        <node name="T11" color="009191" compute="35.9">
+          <to name="T13" data="0.6"/>
+        </node>
+        <node name="T12" color="008787" compute="1464">
+          <to name="T14" data="0.0002"/>
+        </node>
+        <node name="T13" color="007D7D" compute="137.8" >
+          <to name="T14" data="0.00029"/>
+        </node>
+        <node name="T14" color="007373" compute="1553.3"/>
+        <!-- example node without outgoing edge-->
+    </wfg>
+  </wfgs>
+</config>
