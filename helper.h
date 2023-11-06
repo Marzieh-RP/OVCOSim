@@ -55,7 +55,6 @@ void print_cost_to_file(){
 double calculate_total_cost(){
     //comment to avoid this
 
-    
     return time_spent * time_weight + cost * cost_weight + energy * energy_weight;
 }
 
@@ -258,6 +257,33 @@ bool rl_gen_next_assignment(const vector<int> & orig_assignments,vector<int>&ass
 
 
 
+//generate the next assignment genetic algorithm mutations
+bool ga_dvfs_mutation_gen_next_assignment(const vector<int> & orig_assignments,vector<int>&assignments, int& current_count, int max_count){
+    if (current_count < max_count){
+        bool success = false;
+        while (!success){
+            int index = rand()% assignments.size();
+            if (index < assignments.size()>>1)
+            {
+                if (orig_assignments[index] == -1){
+                    assignments[index] = rand()%resources.size();
+                    success = true;
+                }
+            }
+            else{
+                int resource_used = assignments[index- (assignments.size()>>1)];
+                if (resources[resource_used].getType() == 1){
+                    assignments[index] =rand()%resources[resource_used].getspratios().size(); 
+                }
+            }
+        }
+        current_count++;
+        return true;
+    }
+    return false;
+
+
+}
 
 //generate the next assignment genetic algorithm mutations
 bool ga_mutation_gen_next_assignment(const vector<int> & orig_assignments,vector<int>&assignments, int& current_count, int max_count){
@@ -311,10 +337,12 @@ void runWithAssignments(){
             if (resources[i].checkBusy())
                 continue;
             for (int j=0;j<wfgs.size();j++){
+                if (resources[i].checkBusy())
+                    continue;
                 if (wfgs[j].graphdone()== false){
                     if(wfgs[j].startRunningTasks(0,i)){
                         resources[i].getBusy();
-                        j=wfgs.size();//end this loop
+                        //j=wfgs.size();//end this loop
                     }
                 }
             }
@@ -383,6 +411,7 @@ void runWithAssignments(){
                 for (int j=0;j<dones.size();j++){
                     if (dones[j]< resources.size())//computation task
                         resources[dones[j]].getFree();
+                        
                     else{
                         //communication task. We need to extract link indices from this number
                         int decode = dones[j];

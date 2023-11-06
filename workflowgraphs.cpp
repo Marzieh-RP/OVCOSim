@@ -29,6 +29,21 @@ void wfg::initialize_matrix(){
 void wfg::setNumComp(int n){
     num_compute_resources = n;
 }
+
+void wfg::setdvfs(vector<pair<double,double> > ratios){
+device_dvfs = ratios;
+}
+void wfg::setMobileDevice(string name){
+    local_device_name = name;
+}
+
+string wfg::getMobileDevice(){
+    return local_device_name;
+}
+void wfg::setMobileDeviceList(unordered_set<int> mylist, int thisone){
+    local_device_index = thisone;
+    mobile_devices = mylist;
+}
 //set the name of the graph
 void wfg::setName(string n){
     name = n;
@@ -52,6 +67,10 @@ void wfg::transform_graph(){
         temp.type = 0;//type 0 means computation task
         temp.assigned_to = assignments[i]; //assignment needs to be known
         temp.load = processing_time[i]/compute_speed[assignments[i]]; //processing time divided by compute speed of the assigned resource shows time it takes to run the task
+        //if we are using DVFS and the assignment is local, load needs to be adjusted
+        if (device_dvfs.size() > 0 && assignments[i] == local_device_index){
+            temp.load /= device_dvfs[PS[i]].first;
+        }
         tasks.push_back(temp);//add it to list of tasks
     }
     //see if subsequent tasks are on the same resource or not.
@@ -168,9 +187,37 @@ void wfg::initializeAssignments(const vector<int>& assignment){
     }
 }
 
-void wfg::updateAssignments(const vector<int>& assignment, int start_index){
+void wfg::initPS(const vector<int>& assignment){
+    for (int i =0; i<assignment.size();i++){
+        PS.push_back(assignment[i]);
+    }
+}
+
+ void wfg::sanitizeAssignments(vector<int>& assignment,int start_index){
+     for (int i=start_index;i<start_index+assignments.size();i++)
+     {
+         //local device index must be updated to match
+         if (mobile_devices.count(assignment[i]) == 1)
+         assignment[i] = local_device_index;
+     }
+ 
+ }
+ 
+ void wfg::updateAssignments(vector<int>& assignment, int start_index){
+     
+     sanitizeAssignments(assignment,start_index);
+ 
     for (int i=0;i<assignments.size();i++){
         assignments[i] = assignment[start_index+i];
+    }
+}
+
+void wfg::updatePS(vector<int>& assignment, int start_index){
+     
+    //sanitizePS(assignment,start_index);
+ 
+    for (int i=0;i<assignments.size();i++){
+        PS[i] = assignment[start_index+i];
     }
 }
 
@@ -454,8 +501,13 @@ void wfg::update_costs(double& total_time_local, double& total_cost){
                     if (tasks[events[i].task_num].type == 0){//if it's a computation task
                         int rr = tasks[events[i].task_num].assigned_to;//find the resource it is assigned to
                         total_cost += compute_cost[rr]* duration;//cost of task being run
-                        if (rr == 0)//only if it is local
+                        if (rr == local_device_index){//only if it is local
+                            if (device_dvfs.size() != 0){
+                            duration *= device_dvfs[PS[events[i].task_num]].second;
+                            }
                             total_time_local += duration;//increase local device runtime
+                            //we use the total_time_local for power purposes, so we can scale it here
+                        }
                     }
                 }
             }
@@ -472,8 +524,11 @@ wfg::wfg(string n, double nodes_avg, double nodes_dev, int seed, double load_avg
     //randomly determine size of graph based on distribution
     num_nodes = floor(random_n(g1));
     //use the normal distribution to generate load sizes for computation tasks
-    for (int i=0;i<num_nodes;i++)
-        processing_time.push_back(random_load(g1));
+    for (int i=0;i<num_nodes;i++){
+        double random_load_chosen = random_load(g1);
+        while (random_load_chosen <=0)
+            random_load_chosen = random_load(g1);
+        processing_time.push_back(random_load_chosen);}
     initialize_matrix();
     color = col;
     for (int i=0;i<num_nodes;i++){
@@ -486,6 +541,8 @@ wfg::wfg(string n, double nodes_avg, double nodes_dev, int seed, double load_avg
         for (int j=i+1;j<num_nodes;j++){
             if (is_link(g1) > p_degree){//random number between 0 to 100, less than degree of parallelism, make a link.
                 adj_matrix[i][j] = random_com(g1);
+                while (adj_matrix[i][j] <=0)
+                    adj_matrix[i][j] = random_com(g1);
             }
 
         }
@@ -524,10 +581,10 @@ wfg::wfg(string n, double nodes_avg, double nodes_dev, int seed, double load_avg
                     adj_matrix[i][k] = -1;
                 }
             }
-   //the last node should depend on all nodes. if it doesn't create a direct one
+    //the last node should depend on all nodes. if it doesn't create a direct one
     for (int i=0;i<num_nodes-1;i++)
         if (dep_list[num_nodes-1].count(i) == 0){
-        adj_matrix[i][num_nodes-1] = random_com(g1);
+            adj_matrix[i][num_nodes-1] = random_com(g1);
         }
 
 

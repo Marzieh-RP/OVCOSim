@@ -89,11 +89,11 @@ void visualize_wfgs(){
                     continue;
                 //if there is a connection between two tasks, create an edge
                 if (wfgs[gr].get_matrix(ii,jj) < 1)
-                    fout<<"    T"<<gr<<"x"<<ii<<" -> T"<<gr<<"x"<<jj<<" [label=<"<<wfgs[gr].get_matrix(ii,jj)*1024<<" B>]"<<endl;
-                else if (wfgs[gr].get_matrix(ii,jj) < 1024)
+                    fout<<"    T"<<gr<<"x"<<ii<<" -> T"<<gr<<"x"<<jj<<" [label=<"<<wfgs[gr].get_matrix(ii,jj)*1000<<" B>]"<<endl;
+                else if (wfgs[gr].get_matrix(ii,jj) < 1000)
                     fout<<"    T"<<gr<<"x"<<ii<<" -> T"<<gr<<"x"<<jj<<" [label=<"<<wfgs[gr].get_matrix(ii,jj)<<" KB>]"<<endl;
                 else
-                    fout<<"    T"<<gr<<"x"<<ii<<" -> T"<<gr<<"x"<<jj<<" [label=<"<<wfgs[gr].get_matrix(ii,jj)/1024.0<<" MB>]"<<endl;
+                    fout<<"    T"<<gr<<"x"<<ii<<" -> T"<<gr<<"x"<<jj<<" [label=<"<<wfgs[gr].get_matrix(ii,jj)/1000.0<<" MB>]"<<endl;
 
             }
         }

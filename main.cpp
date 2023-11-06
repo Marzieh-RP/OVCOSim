@@ -7,6 +7,7 @@
 #include <sstream>
 #include <cassert>
 #include <unordered_map>
+#include <unordered_set>
 #include "xmlparser/pugixml.hpp"
 #include "globals.h"
 #include "parser.h"
@@ -63,10 +64,13 @@ int main(int argc, char *argv[]){
     //resource speeds are needed for transforming the workflow graph, pass them here to all wfgs
     vector<double> resource_speeds;
     vector<double> resource_costs;
+        unordered_set<int> all_mobiles;
     //gather information needed from resorces
     for (int i=0;i<resources.size();i++){
         resource_speeds.push_back(resources[i].getSpeed());
         resource_costs.push_back(resources[i].getCost());    
+         if (resources[i].getType() == 1)
+             all_mobiles.insert(i);
     }
 
     //create structures for link information to pass to work flow graphs
@@ -94,12 +98,24 @@ int main(int argc, char *argv[]){
         wfgs[i].setCosts(resource_costs);
         wfgs[i].setLinkSpeeds(link_speeds);
         wfgs[i].setLinkLatencies(link_latencies);
+        for (int j=0;j<resources.size();j++){
+            if (wfgs[i].getMobileDevice() == resources[j].getName()){
+                wfgs[i].setMobileDeviceList(all_mobiles,j);
+                wfgs[i].setdvfs(resources[j].getspratios());
+                }
+        }
     }
     //combine all assignments into one:
     vector<int> all_assignments;
     for (int i=0;i<wfgs.size();i++){
         vector<int> temp = wfgs[i].getAssignments();
         all_assignments.insert(all_assignments.end(), temp.begin(), temp.end());
+    }
+
+    //in dvfs mode, we need to double the assignments.
+    if (dvfs){
+        vector<int> temp (all_assignments.size(),-1);
+        all_assignments.insert(all_assignments.end(),temp.begin(),temp.end());
     }
     //all are assignments given by the user or do we need to find assignments?
     bool assignments_given = true;
@@ -135,6 +151,13 @@ int main(int argc, char *argv[]){
             wfgs[gr].updateAssignments(current,start_index);
             start_index += wfgs[gr].getAssignments().size();
         }
+        //if dvfs, pass again
+        if (dvfs)
+        for (int gr = 0;gr<wfgs.size();gr++){
+            wfgs[gr].updatePS(current,start_index);
+            start_index += wfgs[gr].getAssignments().size();
+        }
+
         //run the graphs
         runWithAssignments();
         //get the costs
@@ -252,12 +275,29 @@ int main(int argc, char *argv[]){
 
         }
         //genetic algorithm mutations
-        while (algorithm == ga && ga_mutation_gen_next_assignment(original,current,count_it,algorithm_iterations)){
+        while (algorithm == ga){
+        
+        if (dvfs){
+        if (ga_dvfs_mutation_gen_next_assignment(original,current,count_it,algorithm_iterations) == false)
+        break;
+        }
+        else{
+        if (ga_mutation_gen_next_assignment(original,current,count_it,algorithm_iterations) == false)
+        break;
+        }
 
             int temp_start = 0;
             for (int gr=0;gr<wfgs.size();gr++){
                 wfgs[gr].updateAssignments(current,temp_start);
                 temp_start = wfgs[gr].getAssignments().size();
+            }
+
+            //if dvfs, pass again
+            start_index = start_index >> 1;
+            if (dvfs)
+            for (int gr = 0;gr<wfgs.size();gr++){
+                wfgs[gr].updatePS(current,start_index);
+                start_index += wfgs[gr].getAssignments().size();
             }
 
             runWithAssignments();

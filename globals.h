@@ -11,6 +11,7 @@ algorithms algorithm = randomized;//default algorithm
 int algorithm_iterations = 100;//default number of iterations
 bool usegnuplot = false;//by default, gnuplot is not used
 bool usegraphviz = false;//by default, graphviz is not used
+bool dvfs = false;//by default
 
 /*values used in the cost function*/
 double time_spent;

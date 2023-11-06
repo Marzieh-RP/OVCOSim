@@ -70,6 +70,10 @@ void parse_settings(string filename){
             if (this_value == "on")
                 usegraphviz = true;
         }
+        else if (this_name == "dvfs"){
+            if (this_value == "on")
+                dvfs = true;
+        }
         //read the weight for runtime and convert it to double
         else if (this_name == "speed_weight"){
             time_weight = stod(this_value);
@@ -136,6 +140,10 @@ void parse_compute(string filename){
             //parse its cost
             else if (t_name == "cost")
                 t_comp.setCost(stod(t_val));
+             else if (t_name == "devtype"){
+                 t_comp.setType(t_val);}
+             else if (t_name == "cores"){
+                 t_comp.setCores(stoi(t_val));}
             else
                 cout<<"UKNOWN "<<t_val<<"WITH VALUE"<<t_val<<endl;
         }
@@ -150,42 +158,81 @@ void parse_compute(string filename){
     //parse the connections between computation networks
     for (pugi::xml_node xmlresource = xmlresources.first_child(); xmlresource; xmlresource = xmlresource.next_sibling())
     {
-        //find the name
+
+
         string first_name = xmlresource.attribute("name").value();
         //parse all connections
         for (pugi::xml_node connection = xmlresource.first_child(); connection; connection = connection.next_sibling())
         {
-            string d_name = "";
-            double d_speed = 0;
-            double d_latency = 0;
-            //the hash table is used to find the index using the name
-            int first_index = temporary_name_to_index_for_links[first_name];
-            //pares all attributes
-            for (pugi::xml_attribute attr = connection.first_attribute(); attr; attr = attr.next_attribute())
-            {
-                string t_name = attr.name();
-                string t_val = attr.value();
-                //link attributes, to what resource, at what speed and at what latency
-                if (t_name == "to"){
-                    d_name = t_val;
+
+
+            string node_name = connection.name();
+            if (node_name.compare("connection") == 0){
+                string d_name = "";
+                double d_speed = 0;
+                double d_latency = 0;
+                //the hash table is used to find the index using the name
+                int first_index = temporary_name_to_index_for_links[first_name];
+                //pares all attributes
+                for (pugi::xml_attribute attr = connection.first_attribute(); attr; attr = attr.next_attribute())
+                {
+                    string t_name = attr.name();
+                    string t_val = attr.value();
+                    //link attributes, to what resource, at what speed and at what latency
+                    if (t_name == "to"){
+                        d_name = t_val;
+                    }
+                    else if (t_name == "speed"){
+                        d_speed = stod(t_val);
+                    }
+                    else if (t_name == "latency"){
+                        d_latency = stod(t_val);
+                    }
+                    else
+                        cout<<"UKNOWN"<<t_name<<"WITH VALUE"<<t_val<<endl;
+
                 }
-                else if (t_name == "speed"){
-                    d_speed = stod(t_val);
+                //find the index of the other resource to make the link
+                int second_index = temporary_name_to_index_for_links[d_name];
+                //we can make the link now that we have all the info
+                links[first_index][second_index].initialize(d_name, d_speed, d_latency);
+            }
+            else if (node_name.compare("pstradeoff") == 0){
+
+                int first_index = temporary_name_to_index_for_links[first_name];
+                double sratio = 1;
+                double pratio = 1;
+                for (pugi::xml_attribute attr = connection.first_attribute(); attr; attr = attr.next_attribute())
+                {
+                    string t_name = attr.name();
+                    string t_val = attr.value();
+                    //link attributes, to what resource, at what speed and at what latency
+                    if (t_name == "powerratio"){
+                        pratio = stod(t_val);
+                    }
+                    else if (t_name == "speedratio"){
+                        sratio = stod(t_val);
+                    }
+                    else
+                        cout<<"UKNOWN"<<t_name<<"WITH VALUE"<<t_val<<endl;
+
                 }
-                else if (t_name == "latency"){
-                    d_latency = stod(t_val);
-                }
-                else
-                    cout<<"UKNOWN"<<t_name<<"WITH VALUE"<<t_val<<endl;
+                resources[first_index].addPS(sratio,pratio);
 
             }
-            //find the index of the other resource to make the link
-            int second_index = temporary_name_to_index_for_links[d_name];
-            //we can make the link now that we have all the info
-            links[first_index][second_index].initialize(d_name, d_speed, d_latency);
         }
-
     }
+
+    for (int i=0;i<links.size();i++)
+        for (int j=0;j<links[i].size();j++){
+            if (i == j)continue;
+
+            if (links[i][j].getName()==""){
+                string un ="unused";
+                links[i][j].initialize(un,0.00001,100000.0);//large enough numbers to basically make it unusable
+            }
+
+        }
 
 }
 
@@ -204,6 +251,7 @@ void parse_wfgs(string filename){
     {
 
         string wfg_type = xmlwfg.attribute("type").value();
+        string mobile_device = xmlwfg.attribute("device").value();
         if (wfg_type == "userdefined"){
             string wfg_name = xmlwfg.attribute("name").value();//extract WFG name
             string wfg_color = xmlwfg.attribute("color").value();//extract WFG color
@@ -264,6 +312,11 @@ void parse_wfgs(string filename){
             temp.initializeColors(t_colors);
             temp.initializeNames(t_names);
             temp.initializeAssignments(t_assignments);
+            temp.setMobileDevice(mobile_device);
+            if (dvfs){
+            vector<int> psinit (t_assignments.size(),-1);
+            temp.initPS(t_assignments);
+            }
 
             //one inner loop for outgoing edges from nodes of that WFG to each other
             temp.initialize_matrix();

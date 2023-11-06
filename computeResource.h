@@ -2,6 +2,7 @@
 #ifndef comp_h
 #define comp_h
 #include <string>
+#include <vector>
 using namespace std;
 
 class computeResource{
@@ -12,23 +13,33 @@ private:
     double speed;//computation speed of resource
     double cost_per_second;//cost to use the resource per second
     bool is_busy;//is the resource busy running a task?
+    int devtype;//0 for servers
+    int cores;
+    int cores_used;
+    vector<pair<double,double> > spratios;
 public:
     computeResource();//default constructor
     /*accessor functions*/
     double getSpeed();
+    int getType();
     double getCost();
-    double getBusy();
-    double getFree();
+    void getBusy();
+    void getFree();
+    int getCores();
     string getName();
     bool checkBusy();
     double getPow();
+    vector<pair<double,double> > getspratios();
     double getIdlePow();
     /*mutator functions*/
     void setName(string n);
     void setPow(double d);
+    void setType(string mytype);
+    void setCores(int c);
     void setIdlePow(double d);
     void setSpeed(double s);
     void setCost(double c);
+    void addPS(double s,double p);
 };
 
 class link{

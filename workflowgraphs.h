@@ -4,6 +4,7 @@
 #include <limits>
 #include <string>
 #include <iostream>
+#include <unordered_set>
 
 using namespace std;
 
@@ -24,9 +25,15 @@ class wfg{
     private:
         string name; //name of graph
         string color; //graph color. Used in visualizing links in the graph
+        string local_device_name;//device that this wfg originated from
+        vector<pair<double,double>> device_dvfs;
+
+        int local_device_index;
+        unordered_set<int> mobile_devices;
         int num_nodes; //number of nodes in the graph before transformation
         vector<double> processing_time; // processing time needed for each graph. Used in the original graph before transformation only.
         vector<int> assignments; // assignments. This must be valid before transformation
+        vector<int> PS; // PS. This must be valid before transformation
         vector<vector<double> > adj_matrix; // communication between tasks. -1 implies no connection between the tasks, other values are the amount of data to be communicated
 
         /*variables below are used in the transformed graph*/
@@ -58,8 +65,12 @@ class wfg{
         double get_matrix(int s, int d);//get the value of the matrix from s to d
         void setName(string n);//set name of graph
         void setNumNodes(int n);//set number of nodes
+        void setdvfs(vector<pair<double,double> > ratios);
         int getNumNodes();//get number of nodes
         int getNumTasks();//get number of tasks
+        void setMobileDevice(string n); 
+        string getMobileDevice(); 
+        void setMobileDeviceList(unordered_set<int> mylist, int thisone); 
 
         void initializePT(const vector<double>& data);//initialize the processing time vector
         void initializeColors(const vector<string>& co);//initialize colors of tasks
@@ -69,8 +80,11 @@ class wfg{
         void initializeNames(const vector<string>& n);//initialize the names of tasks
 
         void initializeAssignments(const vector<int>& assignment);//initialize assignments of tass
+        void initPS(const vector<int>& assignment);//initialize assignments of tass
 
-        void updateAssignments(const vector<int>& assignment, int start_index);//update a given assignment
+        void updateAssignments(vector<int>& assignment, int start_index);//update a given assignment
+        void updatePS(vector<int>& assignment, int start_index);//update PS
+        void sanitizeAssignments(vector<int>& assignment, int start_index);//sanitize a given assignment
 
         int getSize();// return size 
         double getpt(int i);// return processing time of index
