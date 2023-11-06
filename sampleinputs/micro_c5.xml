@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<config>
+  <settings algorithm="mutation" iterations="100000" usegnuplot="on" usegraphviz="on" speed_weight = "0.9" energy_weight = "0.1" cost_weight = "0" dvfs = "on"/>
+  <resources>
+    <!--the first resource must be the local device-->
+    <resource name="Mobile1" idlepowerratio="0.2" speed="1" cost="0" devtype="mobile">
+      <!--speed is relative to the mobile device-->
+      <connection to="Cloud1" speed="50" latency="100"/>
+      <pstradeoff speedratio="1" powerratio="1"/>
+      <pstradeoff speedratio="0.8" powerratio="0.51"/>
+      <pstradeoff speedratio="0.6" powerratio="0.28"/>
+      <pstradeoff speedratio="0.4" powerratio="0.11"/>
+      <!--speed is in MBps and latency is in ms-->
+    </resource>
+    <resource name="Mobile2" idlepowerratio="0.2" speed="1" cost="0" devtype="mobile">
+      <!--speed is relative to the mobile device-->
+      <connection to="Cloud1" speed="50" latency="100"/>
+      <pstradeoff speedratio="1" powerratio="1"/>
+      <pstradeoff speedratio="0.8" powerratio="0.51"/>
+      <pstradeoff speedratio="0.6" powerratio="0.28"/>
+      <pstradeoff speedratio="0.4" powerratio="0.11"/>
+      <!--speed is in MBps and latency is in ms-->
+    </resource>
+    <resource name="Cloud1" speed="3" cost = "1.51" devtype="server" cores="3">
+      <connection to="Mobile1" speed="150" latency="100"/>
+      <connection to="Mobile2" speed="150" latency="100"/>
+    </resource>
+  </resources>
+  <wfgs>
+    <!--start of workflow graphs-->
+    <wfg name="WFG1" color="FF0000" type="userdefined" device = "Mobile1">
+      <!--first workflow graph-->
+        <!--nodes of WFG-->
+        <node name="T0" color="FF0000" compute="1000" assignment="Mobile1">
+          <!--compute time is in ms, as measured on the mobile device-->
+          <!--the node transmits tasks to which other node(s)-->
+          <to name="T1" data="1"/>
+          <to name="T2" data="1"/>
+          <to name="T3" data="1"/>
+          <!--data is in KB-->
+        </node>
+        <node name="T1" color="AA0000" compute="9000" >
+          <to name="T4" data="1"/>
+        </node>
+        <node name="T2" color="880000" compute="2000">
+          <to name="T4" data="1"/>
+        </node>
+        <node name="T3" color="660000" compute="2000">
+          <to name="T4" data="1"/>
+        </node>
+        <node name="T4" color="440000" compute="1000" assignment="Mobile1">
+        </node>
+        <!-- example node without outgoing edge-->
+    </wfg>
+    <wfg name="WFG2" color="00FF00" type="userdefined" device = "Mobile2">
+      <!--first workflow graph-->
+        <!--nodes of WFG-->
+        <node name="T0" color="00FF00" compute="1000" assignment="Mobile2">
+          <!--compute time is in ms, as measured on the mobile device-->
+          <!--the node transmits tasks to which other node(s)-->
+          <to name="T1" data="1"/>
+          <to name="T2" data="1"/>
+          <to name="T3" data="1"/>
+          <!--data is in KB-->
+        </node>
+        <node name="T1" color="00AA00" compute="9000" >
+          <to name="T4" data="1"/>
+        </node>
+        <node name="T2" color="008800" compute="2000">
+          <to name="T4" data="1"/>
+        </node>
+        <node name="T3" color="008800" compute="2000">
+          <to name="T4" data="1"/>
+        </node>
+        <node name="T4" color="004400" compute="1000" assignment="Mobile2">
+        </node>
+        <!-- example node without outgoing edge-->
+    </wfg>
+  </wfgs>
+</config>
