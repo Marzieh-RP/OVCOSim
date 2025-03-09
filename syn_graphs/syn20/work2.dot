@@ -1,0 +1,69 @@
+digraph W0{
+rankdir="LR"
+subgraph cluster_syn{
+label="syn"
+    Tsynx0 [label=T0,shape="circle"]
+    Tsynx1 [label=T1,shape="circle"]
+    Tsynx2 [label=T2,shape="circle"]
+    Tsynx3 [label=T3,shape="circle"]
+    Tsynx4 [label=T4,shape="circle"]
+    Tsynx5 [label=T5,shape="circle"]
+    Tsynx6 [label=T6,shape="circle"]
+    Tsynx7 [label=T7,shape="circle"]
+    Tsynx8 [label=T8,shape="circle"]
+    Tsynx9 [label=T9,shape="circle"]
+    Tsynx10 [label=T10,shape="circle"]
+    Tsynx11 [label=T11,shape="circle"]
+    Tsynx12 [label=T12,shape="circle"]
+    Tsynx13 [label=T13,shape="circle"]
+    Tsynx14 [label=T14,shape="circle"]
+    Tsynx15 [label=T15,shape="circle"]
+    Tsynx16 [label=T16,shape="circle"]
+    Tsynx17 [label=T17,shape="circle"]
+    Tsynx18 [label=T18,shape="circle"]
+    Tsynx19 [label=T19,shape="circle"]
+    Tsynx20 [label=C0,shape="doublecircle"]
+    Tsynx21 [label=C1,shape="doublecircle"]
+    Tsynx22 [label=C2,shape="doublecircle"]
+    Tsynx23 [label=C3,shape="doublecircle"]
+    Tsynx24 [label=C4,shape="doublecircle"]
+    Tsynx25 [label=C5,shape="doublecircle"]
+    Tsynx26 [label=C6,shape="doublecircle"]
+    Tsynx27 [label=C7,shape="doublecircle"]
+    Tsynx28 [label=C8,shape="doublecircle"]
+    Tsynx29 [label=C9,shape="doublecircle"]
+    Tsynx30 [label=C10,shape="doublecircle"]
+    Tsynx1 -> Tsynx4
+    Tsynx1 -> Tsynx6
+    Tsynx5 -> Tsynx9
+    Tsynx23 -> Tsynx9
+    Tsynx24 -> Tsynx9
+    Tsynx5 -> Tsynx12
+    Tsynx6 -> Tsynx15
+    Tsynx13 -> Tsynx17
+    Tsynx10 -> Tsynx19
+    Tsynx14 -> Tsynx19
+    Tsynx16 -> Tsynx19
+    Tsynx17 -> Tsynx19
+    Tsynx20 -> Tsynx19
+    Tsynx21 -> Tsynx19
+    Tsynx22 -> Tsynx19
+    Tsynx25 -> Tsynx19
+    Tsynx26 -> Tsynx19
+    Tsynx27 -> Tsynx19
+    Tsynx28 -> Tsynx19
+    Tsynx29 -> Tsynx19
+    Tsynx30 -> Tsynx19
+    Tsynx0 -> Tsynx20
+    Tsynx2 -> Tsynx21
+    Tsynx3 -> Tsynx22
+    Tsynx4 -> Tsynx23
+    Tsynx7 -> Tsynx24
+    Tsynx8 -> Tsynx25
+    Tsynx9 -> Tsynx26
+    Tsynx11 -> Tsynx27
+    Tsynx12 -> Tsynx28
+    Tsynx15 -> Tsynx29
+    Tsynx18 -> Tsynx30
+    }
+}

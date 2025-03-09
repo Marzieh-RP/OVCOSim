@@ -1,0 +1,22 @@
+digraph{
+rankdir="LR"
+R0 [label=Mobile]
+R1 [label=Cloud1]
+R2 [label=Cloud2]
+R3 [label=Fog1]
+R4 [label=Fog2]
+R0 -> R1 [label="50 Mbps, 100ms"]
+R0 -> R2 [label="50 Mbps, 100ms"]
+R0 -> R3 [label="50 Mbps, 20ms"]
+R0 -> R4 [label="50 Mbps, 20ms"]
+R1 -> R0 [label="150 Mbps, 100ms"]
+R1 -> R2 [dir=both, label="1 Gbps, 100ms"]
+R1 -> R3 [dir=both, label="1 Gbps, 100ms"]
+R1 -> R4 [dir=both, label="1 Gbps, 100ms"]
+R2 -> R0 [label="150 Mbps, 100ms"]
+R2 -> R3 [dir=both, label="1 Gbps, 100ms"]
+R2 -> R4 [dir=both, label="1 Gbps, 100ms"]
+R3 -> R0 [label="150 Mbps, 20ms"]
+R3 -> R4 [dir=both, label="1 Gbps, 20ms"]
+R4 -> R0 [label="150 Mbps, 20ms"]
+}

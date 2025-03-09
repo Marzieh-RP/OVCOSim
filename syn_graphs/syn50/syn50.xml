@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<config>
+  <settings algorithm="rand_pb" iterations="300000" usegnuplot="on" usegraphviz="on" speed_weight = "1" energy_weight = "0" cost_weight = "0"/>
+  <resources>
+    <!--the first resource must be the local device-->
+    <resource name="Mobile" idlepowerratio="0.1" speed="1" cost="0" devtype="mobile">
+      <!--speed is relative to the mobile device-->
+      <connection to="Cloud1" speed="50" latency="100"/>
+      <!--speed is in MBps and latency is in ms-->
+      <connection to="Cloud2" speed="50" latency="100"/>
+      <connection to="Fog1" speed="50" latency="20"/>
+      <connection to="Fog2" speed="50" latency="20"/>
+    </resource>
+    <resource name="Cloud1" speed="3" cost = "1.51">
+      <connection to="Mobile" speed="150" latency="100"/>
+      <connection to="Cloud2" speed="1000" latency="100"/>
+      <connection to="Fog1" speed="1000" latency="100"/>
+      <connection to="Fog2" speed="1000" latency="100"/>
+    </resource>
+    <resource name="Cloud2" speed="3" cost = "1.51">
+      <connection to="Mobile" speed="150" latency="100"/>
+      <connection to="Cloud1" speed="1000" latency="100"/>
+      <connection to="Fog1" speed="1000" latency="100"/>
+      <connection to="Fog2" speed="1000" latency="100"/>
+    </resource>
+    <resource name="Fog1" speed="2" cost = "1">
+      <connection to="Mobile" speed="150" latency="20"/>
+      <connection to="Cloud1" speed="1000" latency="100"/>
+      <connection to="Cloud2" speed="1000" latency="100"/>
+      <connection to="Fog2" speed="1000" latency="20"/>
+    </resource>
+    <resource name="Fog2" speed="2" cost = "1">
+      <connection to="Mobile" speed="150" latency="20"/>
+      <connection to="Cloud1" speed="1000" latency="100"/>
+      <connection to="Cloud2" speed="1000" latency="100"/>
+      <connection to="Fog1" speed="1000" latency="20"/>
+    </resource>
+  </resources>
+  <wfgs>
+    <!--start of workflow graphs-->
+    <wfg name="syn" color="000000" type="syntethic" nodes_mean="50" nodes_stddev="0" parallelism="95" computation_mean="100" computation_stddev="10" communication_mean="1000" communication_stddev="200" seed="1"/>
+  </wfgs>
+</config>

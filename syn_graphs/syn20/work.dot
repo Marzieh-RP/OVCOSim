@@ -1,0 +1,47 @@
+digraph W0{
+rankdir="LR"
+subgraph cluster_0{
+label="syn"
+    T0x0 [label=<T0<BR />89.5485 ms>];
+    T0x1 [label=<T1<BR />115.828 ms>];
+    T0x2 [label=<T2<BR />80.4061 ms>];
+    T0x3 [label=<T3<BR />102.576 ms>];
+    T0x4 [label=<T4<BR />96.8471 ms>];
+    T0x5 [label=<T5<BR />84.9219 ms>];
+    T0x6 [label=<T6<BR />100.713 ms>];
+    T0x7 [label=<T7<BR />108.582 ms>];
+    T0x8 [label=<T8<BR />85.8445 ms>];
+    T0x9 [label=<T9<BR />77.0769 ms>];
+    T0x10 [label=<T10<BR />106.319 ms>];
+    T0x11 [label=<T11<BR />108.858 ms>];
+    T0x12 [label=<T12<BR />90.9688 ms>];
+    T0x13 [label=<T13<BR />100.403 ms>];
+    T0x14 [label=<T14<BR />101.944 ms>];
+    T0x15 [label=<T15<BR />101.753 ms>];
+    T0x16 [label=<T16<BR />107.774 ms>];
+    T0x17 [label=<T17<BR />94.6475 ms>];
+    T0x18 [label=<T18<BR />95.5715 ms>];
+    T0x19 [label=<T19<BR />101.713 ms>];
+    T0x0 -> T0x19 [label=<1.12083 MB>]
+    T0x1 -> T0x4 [label=<986.053 KB>]
+    T0x1 -> T0x6 [label=<816.91 KB>]
+    T0x2 -> T0x19 [label=<909.366 KB>]
+    T0x3 -> T0x19 [label=<975.223 KB>]
+    T0x4 -> T0x9 [label=<850.447 KB>]
+    T0x5 -> T0x9 [label=<1.07612 MB>]
+    T0x5 -> T0x12 [label=<966.428 KB>]
+    T0x6 -> T0x15 [label=<1.10252 MB>]
+    T0x7 -> T0x9 [label=<1.04045 MB>]
+    T0x8 -> T0x19 [label=<1.47704 MB>]
+    T0x9 -> T0x19 [label=<1.06215 MB>]
+    T0x10 -> T0x19 [label=<935.161 KB>]
+    T0x11 -> T0x19 [label=<936.775 KB>]
+    T0x12 -> T0x19 [label=<1.49233 MB>]
+    T0x13 -> T0x17 [label=<1.25996 MB>]
+    T0x14 -> T0x19 [label=<1.13685 MB>]
+    T0x15 -> T0x19 [label=<636.987 KB>]
+    T0x16 -> T0x19 [label=<1.03925 MB>]
+    T0x17 -> T0x19 [label=<1.00641 MB>]
+    T0x18 -> T0x19 [label=<1.10725 MB>]
+}
+}
